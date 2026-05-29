@@ -5,6 +5,7 @@ import {
   ManyToOne,
   JoinColumn,
   CreateDateColumn,
+  Index,
 } from 'typeorm';
 import { Wallet } from '../wallets/wallet.entity';
 
@@ -18,12 +19,13 @@ export class Transaction {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar', enum: TransactionType })
+  @Column({ type: 'simple-enum', enum: TransactionType })
   type: TransactionType;
 
   @Column({ type: 'int' })
   amount: number;
 
+  @Index()
   @ManyToOne(() => Wallet, (wallet) => wallet.sentTransactions, {
     nullable: true,
     onDelete: 'SET NULL',
@@ -31,6 +33,7 @@ export class Transaction {
   @JoinColumn({ name: 'source_wallet_id' })
   sourceWallet: Wallet | null;
 
+  @Index()
   @ManyToOne(() => Wallet, (wallet) => wallet.receivedTransactions, {
     onDelete: 'CASCADE',
   })
