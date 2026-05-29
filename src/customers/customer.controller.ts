@@ -19,7 +19,7 @@ export class CustomerController {
     return this.customersService.create(createCustomerDto);
   }
 
-  @Get('id')
+  @Get(':id')
   async findOne(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.customersService.findOne(id);
   }
