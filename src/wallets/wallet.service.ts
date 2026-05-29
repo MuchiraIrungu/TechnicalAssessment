@@ -3,7 +3,7 @@ import {
   //ConflictException,
   NotFoundException,
 } from '@nestjs/common';
-import { DepositDto } from 'src/dto/deposit-cash.dto';
+import { DepositDto } from 'src/wallets/dto/deposit-cash.dto';
 import { DataSource } from 'typeorm';
 import { Wallet } from './wallet.entity';
 import {
