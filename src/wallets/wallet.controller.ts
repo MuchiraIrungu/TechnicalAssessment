@@ -10,7 +10,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { WalletService } from './wallet.service';
-import { DepositDto } from 'src/dto/deposit-cash.dto';
+import { DepositDto } from 'src/wallets/dto/deposit-cash.dto';
 
 @Controller('wallet')
 export class WalletController {
