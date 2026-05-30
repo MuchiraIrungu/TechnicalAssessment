@@ -67,7 +67,7 @@ export class WalletService {
     const [data, total] = await this.dataSource
       .getRepository(Transaction)
       .findAndCount({
-        where: [{ sourceWallet: true }, { destinationWallet: true }],
+        where: [{ sourceWallet: { id } }, { destinationWallet: { id } }],
         relations: {
           sourceWallet: true,
           destinationWallet: true,
