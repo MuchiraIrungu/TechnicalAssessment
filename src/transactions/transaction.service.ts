@@ -15,6 +15,13 @@ export class TransactionService {
   constructor(private readonly dataSource: DataSource) {}
 
   async transfer(transactionDto: TransactionDto): Promise<Transaction> {
+    //ensure the wallets are not the same
+    if (transactionDto.sourceWalletId === transactionDto.destinationWalletId) {
+      throw new BadRequestException(
+        'The source and destination wallets should be different',
+      );
+    }
+
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -34,14 +41,6 @@ export class TransactionService {
 
       if (!destinationWallet) {
         throw new NotFoundException('Destination wallet not found');
-      }
-
-      if (
-        transactionDto.sourceWalletId === transactionDto.destinationWalletId
-      ) {
-        throw new BadRequestException(
-          'The source and destination wallets should be different',
-        );
       }
 
       if (sourceWallet.balance < transactionDto.amount) {
