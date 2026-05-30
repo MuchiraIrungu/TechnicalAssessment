@@ -1,13 +1,12 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Customer } from './customers/customer.entity';
 import { Wallet } from './wallets/wallet.entity';
 import { Transaction } from './transactions/transaction.entity';
 import 'reflect-metadata';
-import { CustomerController } from './customers/customer.controller';
-import { CustomersService } from './customers/customer.service';
+import { CustomersModule } from './customers/customer.module';
+import { TransactionModule } from './transactions/transaction.module';
+import { WalletsModule } from './wallets/wallets.module';
 
 @Module({
   imports: [
@@ -18,11 +17,9 @@ import { CustomersService } from './customers/customer.service';
       synchronize: true,
       logging: true,
     }),
-    ///CustomersModule,
-    //WalletsModule,
-    //TransfersModule,
+    CustomersModule,
+    WalletsModule,
+    TransactionModule,
   ],
-  controllers: [AppController, CustomerController],
-  providers: [AppService, CustomersService],
 })
 export class AppModule {}
