@@ -15,6 +15,14 @@ export class CustomersService {
   async create(createCustomerDto: CreateCustomerDto): Promise<Customer> {
     const normalizedEmail = createCustomerDto.email.toLowerCase();
 
+    const existing = await this.dataSource
+      .getRepository(Customer)
+      .findOne({ where: { email: normalizedEmail } });
+
+    if (existing) {
+      throw new ConflictException('A customer with this email already exists.');
+    }
+
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -37,13 +45,7 @@ export class CustomersService {
       savedCustomer.wallet = wallet;
       return savedCustomer;
     } catch (error) {
-      const err = error as Error;
       await queryRunner.rollbackTransaction();
-      if (err.message?.includes('UNIQUE constraint failed')) {
-        throw new ConflictException(
-          'A customer with this email already exists.',
-        );
-      }
       throw error;
     } finally {
       await queryRunner.release();
