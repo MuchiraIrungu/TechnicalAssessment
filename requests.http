@@ -1,0 +1,70 @@
+##########
+
+Install the REST Client extension in VS Code
+Open requests.http
+Click "Send Request" that appears above each ### block
+Copy IDs from each response into the next request
+
+#########
+
+### Create Customer
+POST http://localhost:3000/customers
+Content-Type: application/json
+
+{
+    "name": "Test User1",
+    "email": "testuser1@gmail.com"
+}
+
+### Create Second Customer( For testing the transaction function)
+POST http://localhost:3000/customers
+Content-Type: application/json
+
+{
+  "name": "Jane Doe",
+  "email": "jane@example.com"
+}
+
+### Get customer based on customerId
+GET http://localhost:3000/customers/{{customerId}}
+
+# to get customers copy customer id after running and paste in the {{customerId}} should look like
+# a1b2c3d4-e5f6-7890-abcd-ef1234567890
+
+### Deposit Funds
+POST http://localhost:3000/wallets/{{walletId}}/deposit
+Content-Type: application/json
+
+{
+  "amount": 5000
+}
+
+# to deposit funds ensure you copy the walletId you get after creating a customer and paste it here in the {{walletId}}
+
+### Successful Transfer
+POST http://localhost:3000/transfers
+Content-Type: application/json
+
+{
+  "sourceWalletId": "{{sourceWalletId}}",
+  "destinationWalletId": "{{destinationWalletId}}",
+  "amount": 2000
+}
+
+### Failed Transfer - Insufficient Funds
+POST http://localhost:3000/transfers
+Content-Type: application/json
+
+{
+  "sourceWalletId": "{{sourceWalletId}}",
+  "destinationWalletId": "{{destinationWalletId}}",
+  "amount": 999999
+}
+
+### Get Transfer by ID
+GET http://localhost:3000/transfers/{{transferId}}
+
+### List Wallet Transactions (paginated)
+GET http://localhost:3000/wallets/{{walletId}}/transactions?page=1&limit=10
+
+
