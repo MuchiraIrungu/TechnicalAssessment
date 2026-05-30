@@ -6,16 +6,27 @@ import {
   JoinColumn,
   CreateDateColumn,
   OneToMany,
+  Check,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Customer } from '../customers/customer.entity';
 import { Transaction } from '../transactions/transaction.entity';
 
 @Entity('wallets')
+@Check('"balance" >= 0')
 export class Wallet {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'int', default: 0, unsigned: true })
+  @Column({
+    type: 'int',
+    default: 0,
+    unsigned: true,
+    transformer: {
+      to: (value: number) => value,
+      from: (value: number) => value,
+    },
+  })
   balance: number;
 
   @OneToOne(() => Customer, (customer) => customer.wallet, {
@@ -32,4 +43,7 @@ export class Wallet {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
